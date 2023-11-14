@@ -36,7 +36,7 @@ class _DetailProductState extends State<DetailProduct> {
 
   Future<void> _loadComments() async {
     Map<String, dynamic> commentsData =
-        await dbHelper.getComments(widget.email, widget.title);
+        await dbHelper.getComments(widget.title);
     List<Map<String, dynamic>> comments = commentsData['comments'];
     setState(() {
       totalComments = comments.length;
@@ -190,7 +190,7 @@ class _DetailProductState extends State<DetailProduct> {
             child: Text('Comments (${totalComments})'),
           ),
           FutureBuilder<Map<String, dynamic>>(
-            future: dbHelper.getComments(widget.email, widget.title),
+            future: dbHelper.getComments(widget.title),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();
@@ -203,7 +203,7 @@ class _DetailProductState extends State<DetailProduct> {
                   children: comments.map((comment) {
                     return ListTile(
                       title: Text(
-                        widget.email,
+                        comment['email'],
                         style: TextStyle(fontSize: 14),
                       ),
                       subtitle: Column(
@@ -221,8 +221,8 @@ class _DetailProductState extends State<DetailProduct> {
                         icon: Icon(Icons.delete),
                         onPressed: () async {
                           await dbHelper.deleteComment(comment['id']);
-                          Map<String, dynamic> commentsData = await dbHelper
-                              .getComments(widget.email, widget.title);
+                          Map<String, dynamic> commentsData =
+                              await dbHelper.getComments(widget.title);
                           List<Map<String, dynamic>> comments =
                               commentsData['comments'];
                           setState(() {
@@ -274,8 +274,8 @@ class _DetailProductState extends State<DetailProduct> {
                       } else {
                         await dbHelper.saveComment(
                             widget.email, widget.title, commentController.text);
-                        Map<String, dynamic> commentsData = await dbHelper
-                            .getComments(widget.email, widget.title);
+                        Map<String, dynamic> commentsData =
+                            await dbHelper.getComments(widget.title);
                         List<Map<String, dynamic>> comments =
                             commentsData['comments'];
                         setState(() {

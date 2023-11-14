@@ -62,13 +62,12 @@ class DatabaseHelper {
     );
   }
 
-  Future<Map<String, dynamic>> getComments(
-      String email, String productId) async {
+  Future<Map<String, dynamic>> getComments(String productId) async {
     var dbClient = await db;
     var commentsResult = await dbClient.query(
       'userComments',
-      where: 'email = ? AND productId = ?',
-      whereArgs: [email, productId],
+      where: 'productId = ?',
+      whereArgs: [productId],
     );
     return {'comments': commentsResult};
   }
